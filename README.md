@@ -175,9 +175,26 @@ Requires Windows 10/11 and the Rust GNU toolchain.
 ```bat
 build.bat     :: UI + agent + icon/version/manifest
 install.bat   :: copy to LocalAppData and create shortcuts
+scripts\package.bat  :: portable package in dist-package\
 ```
 
 `run.bat` builds and runs without installing.
+
+### Building the installer
+
+The setup executable is a self-extracting archive built with `iexpress.exe`, which ships with
+Windows — no Inno Setup or NSIS required:
+
+```bat
+build.bat
+scripts\package.bat
+cd dist-package && tar -a -c -f ..\dist\package.zip *
+iexpress /N /Q dist\setup.sed
+```
+
+The result is `dist\PCSentinel-Setup.exe`: it extracts the package, stops a running instance
+if needed, installs to `%LOCALAPPDATA%\PCSentinel\app`, creates shortcuts and registers the
+app in *Programs and Features*.
 
 ---
 
