@@ -1,0 +1,59 @@
+# Правила детекции PC Sentinel
+# Файл читается агентом при старте. Секции задают списки в нижнем регистре.
+# Изменения применяются после перезапуска приложения.
+#
+# Правила вынесены в отдельный файл, а не вшиты в бинарник, по двум причинам:
+#  1) эвристика антивирусов реагирует на строки скриптовых хостов внутри exe,
+#     принимая защитный инструмент за дроппер;
+#  2) состав правил можно дополнить под свою инфраструктуру без пересборки.
+
+[miner_names]
+xmrig
+nbminer
+phoenixminer
+lolminer
+t-rex
+trex
+ethminer
+kawpowminer
+gminer
+srbminer
+teamredminer
+claymore
+cpuminer
+minerd
+nanominer
+rigel
+bzminer
+wildrig
+noncepool
+excavator
+miniz
+xmr-stak
+
+[miner_args]
+stratum+tcp
+stratum+ssl
+--donate-level
+--cpu-priority
+cryptonight
+randomx
+
+[script_hosts]
+wscript
+cscript
+mshta
+.vbs
+.vbe
+.hta
+powershell -windowstyle hidden
+powershell -w hidden
+-encodedcommand
+
+[suspicious_dirs]
+\temp\
+\tmp\
+\downloads\
+\appdata\local\temp
+\public\
+\perflogs\

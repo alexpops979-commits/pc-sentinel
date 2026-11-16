@@ -1,0 +1,481 @@
+@import "./tokens.css";
+@import "./components.css";
+@import "./views.css";
+
+/* ============================================================
+   Base
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text-1);
+  background: var(--bg-0);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;
+}
+
+/* Фоновая «сцена»: неоновые ореолы + сетка */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(900px 520px at 12% -8%, rgba(59, 130, 246, 0.16), transparent 62%),
+    radial-gradient(760px 460px at 92% 4%, rgba(34, 211, 238, 0.09), transparent 60%),
+    radial-gradient(900px 700px at 60% 108%, rgba(29, 78, 216, 0.12), transparent 65%),
+    linear-gradient(180deg, #05070e 0%, #04060c 100%);
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+  background-image:
+    linear-gradient(rgba(126, 163, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(126, 163, 255, 0.045) 1px, transparent 1px);
+  background-size: 46px 46px;
+  mask-image: radial-gradient(1200px 800px at 30% 0%, #000 0%, transparent 78%);
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+  background: none;
+}
+
+/* Атрибут hidden должен побеждать display из классов (.grid, .card и т.п.) */
+[hidden] {
+  display: none !important;
+}
+
+a {
+  color: var(--accent-bright);
+  text-decoration: none;
+}
+
+::selection {
+  background: rgba(59, 130, 246, 0.35);
+}
+
+/* Скроллбары */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(126, 163, 255, 0.22) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgba(126, 163, 255, 0.18);
+  border: 3px solid transparent;
+  background-clip: content-box;
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(126, 163, 255, 0.34);
+  background-clip: content-box;
+}
+
+/* ============================================================
+   App shell
+   ============================================================ */
+
+.app {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* ---------- Sidebar ---------- */
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 18px 14px 14px;
+  background: linear-gradient(180deg, rgba(9, 13, 22, 0.92), rgba(6, 9, 16, 0.96));
+  border-right: 1px solid var(--line-1);
+  backdrop-filter: blur(18px);
+  min-width: 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 4px 6px 14px;
+  border-bottom: 1px solid var(--line-1);
+}
+
+.brand__logo {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  object-fit: cover;
+  box-shadow: 0 0 0 1px rgba(94, 163, 255, 0.35), 0 8px 22px -8px rgba(59, 130, 246, 0.75);
+  flex: none;
+}
+
+.brand__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.brand__name {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #f2f7ff;
+  white-space: nowrap;
+}
+
+.brand__tag {
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
+  margin: 0 -4px;
+  padding: 0 4px;
+}
+
+.nav__group {
+  margin: 14px 8px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-4);
+  white-space: nowrap;
+}
+
+.nav__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  height: 40px;
+  padding: 0 11px;
+  border-radius: var(--r-md);
+  color: var(--text-2);
+  font-size: 13.5px;
+  font-weight: 500;
+  /* Без этого строка с кириллицей и латиницей встаёт на разную высоту
+     относительно иконки. */
+  line-height: 1;
+  white-space: nowrap;
+  transition: background var(--t-fast), color var(--t-fast), transform var(--t-fast);
+}
+
+.nav__item svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  display: block;
+  opacity: 0.85;
+  transition: opacity var(--t-fast), color var(--t-fast);
+}
+
+.nav__item:hover {
+  background: rgba(126, 163, 255, 0.06);
+  color: var(--text-1);
+}
+
+.nav__item:active {
+  transform: scale(0.985);
+}
+
+.nav__item.is-active {
+  color: #f4f8ff;
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.22), rgba(59, 130, 246, 0.04) 70%, transparent);
+  box-shadow: inset 0 0 0 1px rgba(94, 163, 255, 0.16);
+}
+
+.nav__item.is-active svg {
+  color: var(--accent-bright);
+  opacity: 1;
+  filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.6));
+}
+
+.nav__item.is-active::before {
+  content: "";
+  position: absolute;
+  left: -4px;
+  top: 9px;
+  bottom: 9px;
+  width: 3px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, var(--accent-bright), var(--accent-deep));
+  box-shadow: 0 0 12px 1px var(--accent-glow);
+}
+
+.nav__badge {
+  margin-left: auto;
+  min-width: 20px;
+  height: 19px;
+  padding: 0 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-pill);
+  font-size: 10.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  background: var(--bad-soft);
+  color: var(--bad);
+  box-shadow: inset 0 0 0 1px rgba(255, 93, 108, 0.28);
+}
+
+.nav__badge--warn {
+  background: var(--warn-soft);
+  color: var(--warn);
+  box-shadow: inset 0 0 0 1px rgba(245, 181, 68, 0.28);
+}
+
+.sidebar__foot {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line-1);
+}
+
+.agent-card {
+  padding: 11px 12px;
+  border-radius: var(--r-md);
+  background: linear-gradient(160deg, rgba(59, 130, 246, 0.12), rgba(59, 130, 246, 0.02));
+  box-shadow: inset 0 0 0 1px rgba(94, 163, 255, 0.14);
+}
+
+.agent-card__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.agent-card__title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #dce8ff;
+  white-space: nowrap;
+}
+
+.agent-card__hint {
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--text-3);
+  line-height: 1.35;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: var(--r-md);
+  transition: background var(--t-fast);
+}
+
+.profile:hover {
+  background: rgba(126, 163, 255, 0.05);
+}
+
+.profile__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex: none;
+  box-shadow: 0 0 0 1px rgba(94, 163, 255, 0.3);
+}
+
+.profile__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.profile__name {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile__role {
+  font-size: 10.5px;
+  color: var(--text-3);
+}
+
+/* ---------- Workspace ---------- */
+
+.workspace {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  height: var(--topbar-h);
+  padding: 0 26px;
+  border-bottom: 1px solid var(--line-1);
+  background: linear-gradient(180deg, rgba(8, 12, 20, 0.86), rgba(6, 9, 16, 0.6));
+  backdrop-filter: blur(16px);
+  flex: none;
+}
+
+.topbar__left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.crumbs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-3);
+  letter-spacing: 0.02em;
+}
+
+.crumbs span:last-child {
+  color: var(--text-2);
+}
+
+.topbar__title {
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: #f2f7ff;
+  white-space: nowrap;
+}
+
+.topbar__right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.view {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 22px 26px 34px;
+  outline: none;
+}
+
+.view > * {
+  animation: viewIn var(--t-slow) both;
+}
+
+@keyframes viewIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Компактная сайдбар-раскладка */
+@media (max-width: 1180px) {
+  .brand__text,
+  .nav__item span,
+  .nav__group,
+  .agent-card,
+  .profile__text {
+    display: none;
+  }
+
+  .brand {
+    justify-content: center;
+    padding-inline: 0;
+  }
+
+  .nav__item {
+    justify-content: center;
+    padding: 0;
+  }
+
+  .nav__badge {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    min-width: 16px;
+    height: 16px;
+    font-size: 9px;
+    padding: 0 4px;
+  }
+
+  .profile {
+    justify-content: center;
+  }
+}

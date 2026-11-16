@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>PC Sentinel</title>
+    <link rel="icon" href="./icon.png" />
+    <link rel="stylesheet" href="./styles/app.css" />
+  </head>
+  <body>
+    <div class="app" id="app">
+      <aside class="sidebar" id="sidebar">
+        <div class="brand">
+          <img class="brand__logo" src="./icon.png" alt="" />
+          <div class="brand__text">
+            <span class="brand__name">PC SENTINEL</span>
+            <span class="brand__tag">диагностика · защита</span>
+          </div>
+        </div>
+
+        <nav class="nav" id="nav" aria-label="Основная навигация"></nav>
+
+        <div class="sidebar__foot">
+          <div class="agent-card" id="agent-card">
+            <div class="agent-card__row">
+              <span class="dot dot--live" id="agent-dot"></span>
+              <span class="agent-card__title" id="agent-title">Агент активен</span>
+            </div>
+            <p class="agent-card__hint" id="agent-hint">Сбор телеметрии…</p>
+          </div>
+          <div class="profile">
+            <img class="profile__avatar" src="./icon.png" alt="" />
+            <div class="profile__text">
+              <span class="profile__name">Локальный профиль</span>
+              <span class="profile__role">Администратор</span>
+            </div>
+            <button class="icon-btn" id="btn-settings" title="Настройки" aria-label="Настройки"></button>
+          </div>
+        </div>
+      </aside>
+
+      <div class="workspace">
+        <header class="topbar">
+          <div class="topbar__left">
+            <div class="crumbs" id="crumbs"></div>
+            <h1 class="topbar__title" id="page-title">Обзор</h1>
+          </div>
+          <div class="topbar__right">
+            <div class="status-pill" id="status-pill">
+              <span class="dot dot--live"></span>
+              <span id="status-text">Мониторинг</span>
+            </div>
+            <div class="search">
+              <span class="search__icon" id="search-icon"></span>
+              <input id="search" type="search" placeholder="Поиск процесса, файла, порта…" autocomplete="off" />
+            </div>
+            <button class="btn btn--ghost" id="btn-scan">Быстрая проверка</button>
+          </div>
+        </header>
+
+        <main class="view" id="view" tabindex="-1"></main>
+      </div>
+    </div>
+
+    <div class="toasts" id="toasts" aria-live="polite"></div>
+    <div class="modal-root" id="modal-root"></div>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

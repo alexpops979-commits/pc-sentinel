@@ -1,0 +1,16 @@
+[package]
+name = "pc-sentinel-agent"
+version = "1.0.0"
+edition = "2021"
+description = "PC Sentinel — локальный агент диагностики и защиты"
+
+[[bin]]
+name = "pc-sentinel"
+path = "src/main.rs"
+
+[profile.release]
+opt-level = 2
+panic = "abort"
+# Отладочные символы в поставке не нужны: бинарник вдвое меньше, и меньше
+# поводов для эвристик антивирусов, которые ищут в файле служебные строки.
+strip = true

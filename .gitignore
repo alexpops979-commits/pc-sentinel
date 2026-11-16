@@ -1,0 +1,19 @@
+# build artifacts
+/dist
+/dist-package
+/agent/target
+/tools/icobuild/target
+/node_modules
+
+# local toolchain (portable esbuild, rcedit, probes, portable git)
+/.tools
+
+# runtime data
+*.log
+*.old
+
+# editor / OS
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini

@@ -1,0 +1,20 @@
+{
+  "name": "pc-sentinel",
+  "private": true,
+  "version": "1.0.0",
+  "description": "PC Sentinel — интеллектуальная система диагностики и оптимизации ПК",
+  "type": "module",
+  "scripts": {
+    "build:js": "esbuild src/main.ts --bundle --format=esm --target=es2022 --outfile=dist/main.js",
+    "build:css": "esbuild src/styles/app.css --bundle --outfile=dist/styles/app.css",
+    "build:html": "node scripts/copy-static.mjs",
+    "build": "npm run build:js && npm run build:css && npm run build:html",
+    "watch": "esbuild src/main.ts --bundle --format=esm --target=es2022 --outfile=dist/main.js --watch",
+    "typecheck": "tsc --noEmit",
+    "tauri": "cargo +stable-x86_64-pc-windows-gnu run --manifest-path src-tauri/Cargo.toml"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "typescript": "^5.6.0"
+  }
+}

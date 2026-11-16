@@ -1,0 +1,77 @@
+/* ============================================================
+   PC Sentinel — design tokens
+   Единый стиль: глубокий тёмный фон + электрик-синий неон
+   ============================================================ */
+
+:root {
+  /* --- surfaces --- */
+  --bg-0: #04060c;
+  --bg-1: #070a12;
+  --bg-2: #0a0f1a;
+  --surface-1: #0b111d;
+  --surface-2: #0e1524;
+  --surface-3: #131c2e;
+  --surface-hover: #162034;
+
+  /* --- lines --- */
+  --line-1: rgba(126, 163, 255, 0.09);
+  --line-2: rgba(126, 163, 255, 0.16);
+  --line-3: rgba(126, 163, 255, 0.28);
+
+  /* --- text --- */
+  --text-1: #e9f0ff;
+  --text-2: #a3b3ce;
+  --text-3: #6a7b98;
+  --text-4: #4a5872;
+
+  /* --- accent (electric blue) --- */
+  --accent: #3b82f6;
+  --accent-bright: #5ea3ff;
+  --accent-deep: #1d4ed8;
+  --accent-cyan: #22d3ee;
+  --accent-soft: rgba(59, 130, 246, 0.14);
+  --accent-softer: rgba(59, 130, 246, 0.07);
+  --accent-glow: rgba(59, 130, 246, 0.45);
+
+  /* --- semantic --- */
+  --ok: #2ee6a8;
+  --ok-soft: rgba(46, 230, 168, 0.12);
+  --warn: #f5b544;
+  --warn-soft: rgba(245, 181, 68, 0.12);
+  --bad: #ff5d6c;
+  --bad-soft: rgba(255, 93, 108, 0.12);
+  --info: #7aa2ff;
+
+  /* --- geometry --- */
+  --r-xl: 22px;
+  --r-lg: 18px;
+  --r-md: 13px;
+  --r-sm: 9px;
+  --r-pill: 999px;
+
+  /* --- elevation --- */
+  --shadow-card: 0 26px 50px -30px rgba(0, 0, 0, 0.95), 0 1px 0 rgba(255, 255, 255, 0.035) inset;
+  --shadow-pop: 0 30px 70px -24px rgba(0, 0, 0, 0.9), 0 0 0 1px var(--line-2);
+  --glow-accent: 0 0 24px -4px var(--accent-glow);
+
+  /* --- type --- */
+  --font: "Inter", "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono: "JetBrains Mono", "Cascadia Mono", "Consolas", ui-monospace, monospace;
+
+  /* --- motion --- */
+  --ease: cubic-bezier(0.22, 0.8, 0.24, 1);
+  --t-fast: 130ms var(--ease);
+  --t-med: 220ms var(--ease);
+  --t-slow: 420ms var(--ease);
+
+  /* --- layout --- */
+  --sidebar-w: 254px;
+  --topbar-h: 70px;
+}
+
+/* Компактный режим для небольших экранов */
+@media (max-width: 1180px) {
+  :root {
+    --sidebar-w: 76px;
+  }
+}

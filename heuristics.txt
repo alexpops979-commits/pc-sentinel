@@ -1,0 +1,84 @@
+# Эвристические правила PC Sentinel.
+#
+# Файл читается рядом с exe, в корне проекта и в каталоге данных приложения
+# (%LOCALAPPDATA%\PCSentinel). Дополнять можно без пересборки.
+#
+# Формат: ключ = значение, поля через |.
+# Строки, начинающиеся с # или ;, игнорируются.
+
+# --- Связки API ---------------------------------------------------------
+# api = <функции через +> | <название> | <critical|warning|info> | <объяснение>
+#
+# critical — связка сама по себе означает вредоносное поведение;
+# warning  — требует подтверждения другими признаками;
+# info     — встречается и у нормальных программ (установщики, бэкапы),
+#            поэтому только добавляет вес к общей картине.
+#
+# По отдельности каждая из этих функций есть в половине нормальных программ,
+# поэтому смотрим именно на сочетание.
+
+api = VirtualAllocEx + WriteProcessMemory + CreateRemoteThread | Внедрение кода в чужой процесс | critical | Файл умеет выделять память в другом процессе, писать туда код и запускать его — это классическая инъекция
+api = URLDownloadToFile + WinExec | Загрузка и запуск из сети | critical | Файл скачивает исполняемый файл и сразу запускает его
+api = SetWindowsHookEx + GetAsyncKeyState | Перехват клавиатуры | critical | Сочетание хуков и опроса клавиш характерно для кейлоггеров
+api = CryptEncrypt + FindFirstFile + FindNextFile | Шифрование файлов | critical | Файл перебирает файлы на диске и шифрует их — признак шифровальщика
+api = CreateService + StartService | Установка службы | info | Файл создаёт и запускает службу — так закрепляются в системе
+api = AdjustTokenPrivileges + OpenProcessToken | Повышение привилегий | info | Файл меняет собственные привилегии процесса
+api = IsDebuggerPresent + VirtualProtect | Обход отладки | info | Файл проверяет отладчик и меняет защиту памяти — типично для упакованных образцов
+api = NtCreateThreadEx + NtWriteVirtualMemory | Инъекция через ntdll | critical | Файл работает с процессами напрямую через ядро, минуя обычные API
+
+# --- Упаковщики ---------------------------------------------------------
+# packer = <имя секции> | <название упаковщика>
+
+packer = UPX0 | UPX
+packer = UPX1 | UPX
+packer = UPX2 | UPX
+packer = .aspack | ASPack
+packer = .adata | ASPack
+packer = MPRESS1 | MPRESS
+packer = MPRESS2 | MPRESS
+packer = .themida | Themida
+packer = .winlice | WinLicense
+packer = .vmp0 | VMProtect
+packer = .vmp1 | VMProtect
+packer = .enigma1 | Enigma
+packer = .enigma2 | Enigma
+packer = .petite | Petite
+packer = PEC2 | PECompact
+packer = PEC2TO | PECompact
+packer = .nsp0 | NsPack
+packer = .nsp1 | NsPack
+packer = kkrunchy | kkrunchy
+packer = .packed | неизвестный упаковщик
+
+# --- Признаки скриптов --------------------------------------------------
+# script-download — конструкции загрузки из сети.
+# script-exec — конструкции запуска.
+# Подозрительна именно связка: один маркер ничего не значит.
+
+script-download = downloadstring
+script-download = downloadfile
+script-download = frombase64string
+script-download = certutil -decode
+script-download = certutil -urlcache
+script-download = bitsadmin
+script-download = invoke-webrequest
+script-download = net.webclient
+
+script-exec = wscript.shell
+script-exec = shell.application
+script-exec = invoke-expression
+script-exec = mshta
+script-exec = createobject("wscript
+
+# --- Макросы в документах Office ----------------------------------------
+# macro-marker — имена потоков, по которым узнаётся проект макросов.
+# macro-exec — приёмы, которыми макрос запускает код.
+# Макрос сам по себе не вирус: подозрительно, когда он вызывает оболочку.
+
+macro-marker = vba
+macro-marker = _vba_project
+
+macro-exec = autoopen
+macro-exec = auto_open
+macro-exec = document_open
+macro-exec = workbook_open

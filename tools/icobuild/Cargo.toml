@@ -1,0 +1,11 @@
+[package]
+name = "icobuild"
+version = "1.0.0"
+edition = "2021"
+description = "Сборка app.ico из PNG и проверка иконок в PE-файлах"
+
+[[bin]]
+name = "icobuild"
+path = "src/main.rs"
+
+[dependencies]

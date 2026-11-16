@@ -1,0 +1,102 @@
+# Правила PC Sentinel в стиле YARA.
+#
+# Файл читается рядом с exe, в корне проекта и в каталоге данных приложения
+# (%LOCALAPPDATA%\PCSentinel). Дополнять можно без пересборки.
+#
+# Формат:
+#   rule <Имя>
+#     severity = critical | warning
+#     text = "строка"        — поиск без учёта регистра
+#     hex  = 4D 5A ?? 00     — точные байты, ?? — любой байт
+#     condition = any | all  — достаточно одного совпадения или нужны все
+#
+# Правила с condition = all надёжнее: одно слово почти всегда встречается
+# и в обычных программах.
+
+# --- Скрипты и загрузчики ----------------------------------------------
+
+rule EncodedPowerShell
+  severity = warning
+  text = "powershell"
+  text = "-encodedcommand"
+  condition = all
+
+rule HiddenWindowLaunch
+  severity = warning
+  text = "-windowstyle hidden"
+  text = "bypass"
+  condition = all
+
+rule DownloadAndRun
+  severity = critical
+  text = "downloadstring"
+  text = "invoke-expression"
+  condition = all
+
+rule Base64Payload
+  severity = warning
+  text = "frombase64string"
+  text = "iex"
+  condition = all
+
+# --- Шифровальщики ------------------------------------------------------
+
+rule RansomNote
+  severity = critical
+  text = "your files have been encrypted"
+  condition = any
+
+rule RansomNoteRu
+  severity = critical
+  text = "ваши файлы зашифрованы"
+  condition = any
+
+rule RansomExtension
+  severity = warning
+  text = ".locked"
+  text = "readme"
+  text = "decrypt"
+  condition = all
+
+# --- Кража данных -------------------------------------------------------
+
+rule CredentialDump
+  severity = critical
+  text = "sekurlsa"
+  text = "logonpasswords"
+  condition = all
+
+rule BrowserPasswordTheft
+  severity = warning
+  text = "login data"
+  text = "cookies"
+  text = "sqlite"
+  condition = all
+
+# --- Сокрытие -----------------------------------------------------------
+
+rule AntiVmCheck
+  severity = warning
+  text = "vmware"
+  text = "virtualbox"
+  text = "vbox"
+  condition = all
+
+rule SandboxEvasion
+  severity = warning
+  text = "sandboxie"
+  text = "wine_get_unix_file_name"
+  condition = any
+
+# --- Известные инструменты ---------------------------------------------
+
+rule MimikatzStrings
+  severity = critical
+  text = "mimikatz"
+  condition = any
+
+rule NmapFingerprint
+  severity = warning
+  text = "nmap"
+  text = "os detection"
+  condition = all
