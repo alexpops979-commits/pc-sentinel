@@ -4,6 +4,11 @@ set ROOT=%~dp0
 set ESBUILD=%ROOT%.tools\package\esbuild.exe
 set RCEDIT=%ROOT%.tools\rcedit.exe
 
+rem esbuild и rcedit в репозиторий не входят: при первом запуске
+rem они скачиваются сами, чтобы сборка работала из чистого клона.
+if not exist "%ESBUILD%" (
+  call "%ROOT%scripts\get-esbuild.bat"
+)
 if not exist "%ESBUILD%" (
   echo [!] Не найден %ESBUILD%
   exit /b 1
