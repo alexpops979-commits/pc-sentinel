@@ -170,7 +170,14 @@ Uninstall through Windows settings, or:
 
 ### From source
 
-Requires Windows 10/11 and the Rust GNU toolchain.
+Requires Windows 10/11 and the Rust GNU toolchain:
+
+```bat
+rustup toolchain install stable-x86_64-pc-windows-gnu
+```
+
+Then clone and build — nothing else to prepare. `esbuild` and `rcedit` are not stored in the
+repository; on the first run they are downloaded automatically into `.tools\`.
 
 ```bat
 build.bat     :: UI + agent + icon/version/manifest
@@ -179,6 +186,9 @@ scripts\package.bat  :: portable package in dist-package\
 ```
 
 `run.bat` builds and runs without installing.
+
+The project has **zero Rust dependencies**, so `cargo` needs no network access after the
+toolchain is installed.
 
 ### Building the installer
 
