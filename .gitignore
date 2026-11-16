@@ -17,3 +17,6 @@
 .idea/
 Thumbs.db
 desktop.ini
+
+# internal working notes (not part of the product)
+/.imitri
